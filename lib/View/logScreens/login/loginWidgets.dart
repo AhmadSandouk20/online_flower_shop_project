@@ -121,9 +121,9 @@ Widget buttonOrIndicator({
   return trying
       ? const CircularProgressIndicator()
       : CustomMaterialbutton(
-          onPressed: () {
+          onPressed: () async {
             controller.tryingToLogin = true;
-            controller.login({
+            await controller.login({
               "identifier": controller.emailEController.text,
               "password": controller.passwordEController.text,
             }).then(

@@ -102,13 +102,14 @@ class DioHelper {
         case DioExceptionType.badCertificate:
           break;
         case DioExceptionType.connectionError:
-          getP.Get.dialog(
-            AlertDialog(
-              title: CustomText(
-                text: ShopText.checkInternetConnection,
-              ),
-            ),
-          );
+          // getP.Get.dialog(
+          //   AlertDialog(
+          //     title: CustomText(
+          //       text: ShopText.checkInternetConnection,
+          //     ),
+          //   ),
+          // );
+          log("connection error message ${dioE.error}");
           break;
         case DioExceptionType.connectionTimeout:
         case DioExceptionType.receiveTimeout:

@@ -6,6 +6,8 @@ import 'package:online_flower_shop/common/api/dioHelper.dart';
 import 'package:online_flower_shop/Model/user.dart';
 import 'package:online_flower_shop/common/endPoints.dart';
 
+import 'dart:developer';
+
 class LoginController extends GetxController {
   bool _tToLogin = false;
   set tryingToLogin(bool value) {
@@ -88,28 +90,30 @@ class LoginController extends GetxController {
   //   }
   // }
 
-  login(bodyData) async {
+  Future login(bodyData) async {
     var response = await DioHelper.postData(
       path: LOGIN,
       bodyData: bodyData,
       queryParameters: null,
     ).then(
       (res) {
-        if (res?.statusCode == 200) {
-          return res;
+        if (res != null) {
+          if (res.statusCode == 200) {
+            if (res.data['success'] == true) {
+              log("login me 200 and success");
+              return true;
+            } else {
+              log("login me 200 but not success");
+              return false;
+            }
+          } else if (res.statusCode == 422) {
+            log("login me 422");
+            return false;
+          }
         }
+        log("login me response is null");
+        return false;
       },
     );
-    if (response != null) {
-      if (response.data['success'] == true) {
-        // log("me 200 and success");
-        return true;
-      } else {
-        // log(
-        //   "failCode: ${response.statusCode},failMessage: ${response.statusMessage}",
-        // );
-        return false;
-      }
-    }
   }
 }

@@ -73,13 +73,12 @@ class SignUpController extends GetxController {
     source,
     signUpController,
   ) async {
-    await ShopImagePicker.pickImage(
+    return await ShopImagePicker.pickImage(
       source,
     ).then((pickedImage) {
       signUpController.profileImage = pickedImage;
       Get.back();
     });
-    return null;
   }
 
   set profileImage(File? file) {

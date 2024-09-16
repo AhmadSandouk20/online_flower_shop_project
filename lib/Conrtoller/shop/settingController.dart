@@ -42,10 +42,11 @@ class SettingController extends GetxController {
   logout(String token) async {
     var response = await DioHelper.postData(
         path: LOGOUT,
-        bodyData: {},
+        bodyData: {
+          'Token': token,
+        },
         queryParameters: null,
         headers: {
-          'Token': token,
           "Cache-Control": "no-cache, private",
           "Access-Control-Allow-Origin": "*",
           'Vary': "Authorization",

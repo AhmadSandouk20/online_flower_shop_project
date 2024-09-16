@@ -183,7 +183,7 @@ Widget buttonOrIndicator(
   SignUpController signUpController,
   bool trying,
 ) {
-  log("trying $trying");
+  log("00$trying");
   return trying
       ? const CircularProgressIndicator()
       : CustomMaterialbutton(
