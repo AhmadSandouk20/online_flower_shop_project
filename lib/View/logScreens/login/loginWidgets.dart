@@ -14,8 +14,6 @@ import '../../../Styles/fonts.dart';
 import '../../../common/custom/customMaterialButton.dart';
 import '../../../View/logScreens/logForm.dart';
 import '../../../View/logScreens/signUp/signUp.dart';
-
-import '../../shop/shopMainPage.dart';
 import '../verification/verificationScreen.dart';
 
 Widget middle({
@@ -139,6 +137,14 @@ Widget buttonOrIndicator({
                       "email": controller.emailEController.text,
                       "from": "login",
                     },
+                  );
+                } else {
+                  Get.dialog(
+                    const AlertDialog(
+                      content: Text(
+                        "please make sure you filled the fields and your internet is connected",
+                      ),
+                    ),
                   );
                 }
               },

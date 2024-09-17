@@ -22,12 +22,12 @@ class DioHelper {
         receiveDataWhenStatusError: true,
       ),
     );
-    dio!.interceptors.add(LogInterceptor(
-      request: true,
-      responseBody: true,
-      error: true,
-      requestBody: true,
-    ));
+    // dio!.interceptors.add(LogInterceptor(
+    //   request: true,
+    //   responseBody: true,
+    //   error: true,
+    //   requestBody: true,
+    // ));
   }
 
   static String baseUrl =
@@ -55,9 +55,8 @@ class DioHelper {
     Map<String, dynamic>? headers,
     bool isFormData = false,
   }) async {
-    late final Response response;
     try {
-      response = await dio!.post(
+      Response response = await dio!.post(
         baseUrl + path,
         data: isFormData
             ? FormData.fromMap(
@@ -68,6 +67,11 @@ class DioHelper {
         options: Options(
           headers: headers ??
               {
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Credentials': 'true',
+                'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE',
                 "Accept": "application/json",
               },
         ),
@@ -100,30 +104,85 @@ class DioHelper {
           );
           break;
         case DioExceptionType.badCertificate:
+          getP.Get.dialog(
+            AlertDialog(
+              title: CustomText(
+                text: "Wrong: connectionError",
+              ),
+              content: CustomText(
+                text: dioE.error.toString(),
+              ),
+            ),
+          );
           break;
         case DioExceptionType.connectionError:
-          // getP.Get.dialog(
-          //   AlertDialog(
-          //     title: CustomText(
-          //       text: ShopText.checkInternetConnection,
-          //     ),
-          //   ),
-          // );
-          log("connection error message ${dioE.error}");
+          getP.Get.dialog(
+            AlertDialog(
+              title: CustomText(
+                text: "Wrong: connectionError",
+              ),
+              content: CustomText(
+                text: dioE.error.toString(),
+              ),
+            ),
+          );
+
           break;
         case DioExceptionType.connectionTimeout:
+          getP.Get.dialog(AlertDialog(
+            title: CustomText(
+              text: "Wrong: connectionTimeout",
+            ),
+            content: CustomText(
+              text: dioE.error.toString(),
+            ),
+          ));
         case DioExceptionType.receiveTimeout:
+          getP.Get.dialog(AlertDialog(
+            title: CustomText(
+              text: "Wrong: receiveTimeout",
+            ),
+            content: CustomText(
+              text: dioE.error.toString(),
+            ),
+          ));
         case DioExceptionType.cancel:
+          getP.Get.dialog(AlertDialog(
+            title: CustomText(
+              text: "Wrong: cancel",
+            ),
+            content: CustomText(
+              text: dioE.error.toString(),
+            ),
+          ));
         case DioExceptionType.unknown:
+          getP.Get.dialog(
+            AlertDialog(
+              title: CustomText(
+                text: "Wrong: unknown",
+              ),
+              content: CustomText(
+                text: dioE.error.toString(),
+              ),
+            ),
+          );
         case DioExceptionType.sendTimeout:
+          getP.Get.dialog(
+            AlertDialog(
+              title: CustomText(
+                text: "Wrong: sendTimeout",
+              ),
+              content: CustomText(
+                text: dioE.error.toString(),
+              ),
+            ),
+          );
           break;
       }
     } catch (error) {
       log(
-        "error catched" + error.toString(),
+        "error catched " + error.toString(),
       );
-
-      return response;
     }
     return null;
   }

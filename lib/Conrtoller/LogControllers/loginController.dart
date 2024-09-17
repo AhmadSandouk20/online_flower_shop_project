@@ -90,8 +90,8 @@ class LoginController extends GetxController {
   //   }
   // }
 
-  Future login(bodyData) async {
-    var response = await DioHelper.postData(
+  Future<bool> login(bodyData) async {
+    return await DioHelper.postData(
       path: LOGIN,
       bodyData: bodyData,
       queryParameters: null,
