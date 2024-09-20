@@ -24,14 +24,14 @@ class CustomTextFormField extends StatelessWidget {
   int? maxLength;
   EdgeInsetsGeometry? margin;
   List<TextInputFormatter>? inputFormatters;
-  Function? validate;
+  String? Function(String?)? validate;
 
   String? errorMessage;
 
   CustomTextFormField({
     this.maxLength,
     required this.label,
-    validate,
+    required this.validate,
     errorMessage,
     keyboardType,
     isObscure,
@@ -74,7 +74,8 @@ class CustomTextFormField extends StatelessWidget {
         focusNode: focusNode,
         onFieldSubmitted: onFieldSubmitted,
         textInputAction: textInputAction,
-        validator: validate == null ? null : (value) => validate!(value),
+        validator:
+            validate != null ? (value) => validate!(value) : (value) => null,
         decoration: InputDecoration(
           errorText: errorMessage,
 

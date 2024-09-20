@@ -5,6 +5,13 @@ import 'package:get/get.dart';
 import 'package:online_flower_shop/common/component/selectButton.dart';
 
 class PaymentController extends GetxController {
+  String? isEmpty(String? value) {
+    if (value == null) {
+      return "can't be empty";
+    }
+    return null;
+  }
+
   bool _methodSelected = true;
   bool _saveForFuture = true;
   bool get saveForFuture => _saveForFuture;

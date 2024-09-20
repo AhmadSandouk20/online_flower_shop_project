@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
@@ -48,7 +49,7 @@ class DioHelper {
     return response.data;
   }
 
-  static Future<Response?> postData({
+  static Future<Response<dynamic>?> postData({
     required String path,
     required dynamic bodyData,
     Map<String, dynamic>? queryParameters,
@@ -67,17 +68,14 @@ class DioHelper {
         options: Options(
           headers: headers ??
               {
-                'Access-Control-Allow-Headers': 'Content-Type',
                 'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Credentials': 'true',
-                'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE',
-                "Accept": "application/json",
               },
         ),
       );
-
-      return response.data;
+      log(
+        "response shape $response",
+      );
+      return response;
     } on DioException catch (dioE) {
       // handleExceotion(dioE);
       switch (dioE.type) {
@@ -86,7 +84,7 @@ class DioHelper {
           getP.Get.dialog(
             AlertDialog(
               title: CustomText(
-                text: "Wrong",
+                text: "Wrong badResponse",
               ),
               content: Column(
                 children: errorMessages
@@ -107,7 +105,7 @@ class DioHelper {
           getP.Get.dialog(
             AlertDialog(
               title: CustomText(
-                text: "Wrong: connectionError",
+                text: "Wrong: badCertificate",
               ),
               content: CustomText(
                 text: dioE.error.toString(),
@@ -129,23 +127,27 @@ class DioHelper {
 
           break;
         case DioExceptionType.connectionTimeout:
-          getP.Get.dialog(AlertDialog(
-            title: CustomText(
-              text: "Wrong: connectionTimeout",
+          getP.Get.dialog(
+            AlertDialog(
+              title: CustomText(
+                text: "Wrong: connectionTimeout",
+              ),
+              content: CustomText(
+                text: dioE.error.toString(),
+              ),
             ),
-            content: CustomText(
-              text: dioE.error.toString(),
-            ),
-          ));
+          );
         case DioExceptionType.receiveTimeout:
-          getP.Get.dialog(AlertDialog(
-            title: CustomText(
-              text: "Wrong: receiveTimeout",
+          getP.Get.dialog(
+            AlertDialog(
+              title: CustomText(
+                text: "Wrong: receiveTimeout",
+              ),
+              content: CustomText(
+                text: dioE.error.toString(),
+              ),
             ),
-            content: CustomText(
-              text: dioE.error.toString(),
-            ),
-          ));
+          );
         case DioExceptionType.cancel:
           getP.Get.dialog(AlertDialog(
             title: CustomText(

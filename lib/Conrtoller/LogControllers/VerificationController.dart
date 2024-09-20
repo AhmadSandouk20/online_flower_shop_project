@@ -9,6 +9,13 @@ import 'package:online_flower_shop/main.dart';
 import '../../common/api/dioHelper.dart';
 
 class VerificationController extends GetxController {
+  String? isEmpty(String? value) {
+    if (value == null) {
+      return "can't be empty";
+    }
+    return null;
+  }
+
   RxBool verifiy = false.obs;
   bool get verifiying => verifiy.value;
 
@@ -83,6 +90,7 @@ class VerificationController extends GetxController {
   Future<bool> reSendVerficationCode(
     String email,
   ) async {
+    log("asking for new verfication code");
     return await DioHelper.postData(
       queryParameters: null,
       path: RE_SEND_VERIFICATION_CODE,
@@ -108,6 +116,7 @@ class VerificationController extends GetxController {
   Future<bool> reSend2FactorCode(
     String email,
   ) async {
+    log("asking for new 2factor code");
     return await DioHelper.postData(
       queryParameters: null,
       path: RE_SEND_2FACTOR_CODE,

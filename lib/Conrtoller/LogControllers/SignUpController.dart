@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:dio/dio.dart' as DioPack;
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:online_flower_shop/constants/shopText.dart';
 // import 'package:get/get.dart';
 
 import '../../common/endPoints.dart';
@@ -38,6 +39,15 @@ class SignUpController extends GetxController {
     update();
   }
 
+  bool userDidntChooseImage = false;
+
+  bool get userChoosedImage => userDidntChooseImage;
+
+  set userChoosedImage(bool value) {
+    userDidntChooseImage = true;
+    update();
+  }
+
   bool get tryingToSign => _tryingSign.value;
 
   get phoneEController => _phoneEditingController;
@@ -56,8 +66,8 @@ class SignUpController extends GetxController {
 
   get pickedPdfFile => pickedPdf;
 // TODO FORMKEY
-  // static final signUpformKey = GlobalKey<FormState>();
-  // get formKey => signUpformKey;
+  static final signUpformKey = GlobalKey<FormState>();
+  get formKey => signUpformKey;
 
   pickPdf() async {
     Map<String, dynamic>? result = await ShopFilepicker.pickFile();
@@ -75,10 +85,13 @@ class SignUpController extends GetxController {
   ) async {
     return await ShopImagePicker.pickImage(
       source,
-    ).then((pickedImage) {
-      signUpController.profileImage = pickedImage;
-      Get.back();
-    });
+    ).then(
+      (pickedImage) {
+        signUpController.profileImage = pickedImage;
+
+        Get.back();
+      },
+    );
   }
 
   set profileImage(File? file) {
@@ -128,32 +141,69 @@ class SignUpController extends GetxController {
   }
 
   String? validateEmail(String? email) {
-    if (!GetUtils.isEmail(email ?? '')) {
-      return emailErrorMessage = "email is not valid";
+    String? res = validateEmpty(email);
+    if (res != null) {
+      return res;
+    } else if (!GetUtils.isEmail(email ?? '')) {
+      return "email is not valid";
     }
     return null;
   }
 
   String? validatePassword(String? password) {
-    if (GetUtils.isLengthLessThan(
+    String? res = validateEmpty(password);
+    if (res != null) {
+      return res;
+    } else if (GetUtils.isLengthLessThan(
       password,
       8,
     )) {
-      return passwordErrorMessage = "password is short";
+      return "password is short";
     }
     return null;
   }
 
-  Future<User?>? validateInputs() async {
-    // TODO FORM KEy
-    // bool? validated = signUpformKey.currentState?.validate();
-    // if (validated != null && !validated) {
-    //   update();
-    //   return null;
-    // }
-    if (pickedImage == null) {
-      return null;
+  String? validateEmpty(String? value) {
+    if (value == null || value.isEmpty) {
+      return "You can't leave this field empty";
     }
+    return null;
+  }
+
+  String? validatePasswordAndRePassMatch(
+    String? password,
+    String? rePassword,
+  ) {
+    String? emptyRes = validateEmpty(password);
+    if (emptyRes != null) {
+      return emptyRes;
+    }
+    String? passwordIsAccepted = validatePassword(password);
+
+    if (passwordIsAccepted != null) {
+      return "password must contain speial chars,...";
+    }
+    bool match = password == rePassword;
+    return match ? null : "confirm password must match the password";
+  }
+
+  bool validateInputs() {
+    log('pickedimage is $pickedImage');
+    bool validated = signUpformKey.currentState!.validate();
+    bool noImageSelected = pickedImage == null;
+
+    log('noImageSelected is $noImageSelected');
+    if (noImageSelected) {
+      ShopText.addProfilePhoto = "You Must Choose A Photo For Your Profile";
+      return false;
+    }
+    if (!validated) {
+      return false;
+    }
+    return true;
+  }
+
+  Future<User> getUserInputs() async {
     return await prepareImageToUpload(
       pickedImage!,
     ).then(

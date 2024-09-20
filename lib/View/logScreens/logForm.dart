@@ -6,6 +6,7 @@ import '../../../Conrtoller/LogControllers/SignUpController.dart';
 import '../../../Styles/colors.dart';
 import '../../Styles/themes/themes.dart';
 import '../../../common/custom/customTextFormField.dart';
+import '../../constants/shopText.dart';
 
 class logForm extends StatelessWidget {
   final BuildContext context;
@@ -22,17 +23,16 @@ class logForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return Form(
       // TODO FORMKEY
-      // key: signUp
-      //     ? SignUpController.signUpformKey
-      //     : LoginController.loginFormKey,
+      key: signUp
+          ? SignUpController.signUpformKey
+          : LoginController.loginFormKey,
       child: Column(
         children: [
           CustomTextFormField(
             validate: (value) {
-              logController.validateEmail(value);
+              return logController.validateEmail(value);
             },
-            label: "email".tr,
-            errorMessage: logController.emailErrorMessage,
+            label: ShopText.email,
             textEditingController: logController.emailEController,
             onFieldSubmitted: (_) {
               FocusScope.of(context).requestFocus(
@@ -42,7 +42,8 @@ class logForm extends StatelessWidget {
             textInputAction: TextInputAction.next,
           ),
           CustomTextFormField(
-            label: "phoneNumber".tr,
+            validate: (value) => logController.validateEmpty(value),
+            label: ShopText.phoneNumber,
             focusNode: logController.phoneFocusNode,
             textEditingController: logController.phoneEController,
             textInputAction: TextInputAction.next,
@@ -57,7 +58,8 @@ class logForm extends StatelessWidget {
           ),
           if (signUp)
             CustomTextFormField(
-              label: "username".tr,
+              validate: (value) => logController.validateEmpty(value),
+              label: ShopText.username,
               textEditingController: logController.userNameEController,
               focusNode: logController.userNameFocusNode,
               textInputAction: TextInputAction.next,
@@ -69,10 +71,9 @@ class logForm extends StatelessWidget {
               keyboardType: TextInputType.number,
             ),
           CustomTextFormField(
-              label: "password".tr,
-              errorMessage: logController.passwordErrorMessage,
+              label: ShopText.password,
               validate: (value) {
-                logController.validatePassword(value);
+                return logController.validatePassword(value);
               },
               textEditingController: logController.passwordEController,
               isObscure: true,
@@ -84,7 +85,11 @@ class logForm extends StatelessWidget {
               }),
           if (signUp)
             CustomTextFormField(
-              label: "repassword".tr,
+              validate: (value) => logController.validatePasswordAndRePassMatch(
+                logController.passwordEController.text,
+                value,
+              ),
+              label: ShopText.rePassword,
               isObscure: true,
               textEditingController: logController.rePasswordEController,
               focusNode: logController.rePasswordFocusNode,
@@ -103,12 +108,13 @@ class logForm extends StatelessWidget {
                     context,
                   ) {
                     return CustomTextFormField(
+                      validate: null,
                       textEditingController: logController.pdfEController,
                       label: logController.pdfEController.text
                                   .toString()
                                   .isEmpty ||
                               logController.pdfEController.text == null
-                          ? "uploadPdf".tr
+                          ? ShopText.uploadPdf
                           : logController.pdfEController.text,
                       isObscure: true,
                       labelColor: true,

@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:online_flower_shop/constants/shopText.dart';
 import 'dart:developer';
 
 import '../../../common/sizeConfig.dart';
@@ -44,7 +45,7 @@ class SignUpScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       CustomHeading(
-                        headingText: "signUp".tr,
+                        headingText: ShopText.signUp,
                         isBold: false,
                         fontFamily: ShopFonts.roboto,
                       ),
@@ -63,25 +64,28 @@ class SignUpScreen extends StatelessWidget {
                   left: 140,
                   child: Stack(
                     children: [
-                      GetBuilder<SignUpController>(builder: (context) {
-                        return CircleAvatar(
-                          backgroundColor: ShopLightColors.lightGreyColor,
-                          foregroundColor: ShopLightColors.lightGreyColor,
-                          foregroundImage: signUpController.profileImage != null
-                              ? FileImage(signUpController.profileImage!)
-                              : const AssetImage(
-                                  "assets/images/SignUp/profile.png",
-                                ),
-                          radius: 40.h,
-                        );
-                      }),
+                      GetBuilder<SignUpController>(
+                        builder: (context) {
+                          return CircleAvatar(
+                            backgroundColor: ShopLightColors.lightGreyColor,
+                            foregroundColor: ShopLightColors.lightGreyColor,
+                            foregroundImage:
+                                signUpController.profileImage != null
+                                    ? FileImage(signUpController.profileImage!)
+                                    : const AssetImage(
+                                        "assets/images/SignUp/profile.png",
+                                      ),
+                            radius: 40.h,
+                          );
+                        },
+                      ),
                       Positioned(
                         bottom: -10.h,
                         right: -10.h,
                         child: IconButton(
                           onPressed: () async {
                             await Get.defaultDialog(
-                              title: "chooseImage".tr,
+                              title: ShopText.chooseImage,
                               titleStyle: TextStyle(
                                 fontSize: 15.sp,
                               ),
@@ -94,7 +98,7 @@ class SignUpScreen extends StatelessWidget {
                                     icon: const Icon(
                                       Icons.camera,
                                     ),
-                                    labelText: "camera".tr,
+                                    labelText: ShopText.camera,
                                     onPressed: () async {
                                       await signUpController.pickImage(
                                         ImageSource.camera,
@@ -107,7 +111,7 @@ class SignUpScreen extends StatelessWidget {
                                     icon: const Icon(
                                       Icons.add_photo_alternate_outlined,
                                     ),
-                                    labelText: "gallery".tr,
+                                    labelText: ShopText.gallery,
                                     onPressed: () async {
                                       await signUpController.pickImage(
                                         ImageSource.gallery,
@@ -129,9 +133,13 @@ class SignUpScreen extends StatelessWidget {
                 ),
               ],
             ),
-            const Center(
-              child: Text(
-                "Add Profile Photo",
+            GetBuilder<SignUpController>(
+              builder: (vio) => Center(
+                child: Text(
+                  signUpController.profileImage == null
+                      ? ShopText.addProfilePhoto
+                      : "",
+                ),
               ),
             ),
             logForm(
@@ -154,16 +162,16 @@ class SignUpScreen extends StatelessWidget {
             InkWell(
               onTap: () => Get.back(),
               child: RichText(
-                text: const TextSpan(
-                  style: TextStyle(
+                text: TextSpan(
+                  style: const TextStyle(
                     color: ShopLightColors.primaryTextColor,
                     decoration: TextDecoration.underline,
                   ),
-                  text: "Already have an account? ",
+                  text: ShopText.hasAccount,
                   children: <TextSpan>[
                     TextSpan(
-                      text: ' Login',
-                      style: TextStyle(
+                      text: ShopText.login,
+                      style: const TextStyle(
                         decoration: TextDecoration.underline,
                         color: ShopLightColors.primaryColor,
                       ),
@@ -188,43 +196,40 @@ Widget buttonOrIndicator(
       : CustomMaterialbutton(
           onPressed: () async {
             log("hey from signup");
-            // TODO
-            // here let the form validation and save work and return user object or null
-            signUpController.tryingToSign = true;
-            await signUpController.validateInputs()?.then(
-              (
-                user,
-              ) async {
-                if (user == null) {
-                  signUpController.tryingToSign = false;
-                  return null;
-                }
-                await signUpController
-                    .signUp(
-                  user.toMultiTypes(),
-                )
-                    .then(
-                  (success) {
-                    if (success) {
-                      signUpController.tryingToSign = false;
+            bool dataIsValid = signUpController.validateInputs();
+            if (dataIsValid) {
+              signUpController.tryingToSign = true;
+              await signUpController.getUserInputs().then(
+                (
+                  user,
+                ) async {
+                  await signUpController
+                      .signUp(
+                    user.toMultiTypes(),
+                  )
+                      .then(
+                    (success) {
+                      if (success) {
+                        signUpController.tryingToSign = false;
 
-                      Get.to(
-                        () => const VerificationScreen(),
-                        binding: BindingsBuilder.put(
-                          () => VerificationController(),
-                        ),
-                        arguments: {
-                          "email": signUpController.emailEController.text,
-                          "from": "signup",
-                        },
-                      );
-                    }
-                  },
-                );
-              },
-            );
+                        Get.to(
+                          () => const VerificationScreen(),
+                          binding: BindingsBuilder.put(
+                            () => VerificationController(),
+                          ),
+                          arguments: {
+                            "email": signUpController.emailEController.text,
+                            "from": "signup",
+                          },
+                        );
+                      }
+                    },
+                  );
+                },
+              );
+            }
           },
-          buttonText: "Sign Up",
+          buttonText: ShopText.theSignup,
           backgroundColor: ShopLightColors.primaryColor,
           textColor: Colors.white,
         );

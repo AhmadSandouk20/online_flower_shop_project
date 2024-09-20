@@ -17,8 +17,8 @@ class LoginController extends GetxController {
 
   bool get tryingToLogin => _tToLogin;
 // TODO foRm KEY
-  // static final loginFormKey = GlobalKey<FormState>();
-  // get formKey => loginFormKey;
+  static final loginFormKey = GlobalKey<FormState>();
+  get formKey => loginFormKey;
 
   FocusNode phoneFocusNode = FocusNode();
   FocusNode passwordFocusNode = FocusNode();
@@ -61,34 +61,44 @@ class LoginController extends GetxController {
     super.dispose();
   }
 
-  // TODO duplicate
-
-  String emailErrorMessage = '';
-  String passwordErrorMessage = '';
   String? validateEmail(String? email) {
-    if (!GetUtils.isEmail(email ?? '')) {
-      return emailErrorMessage = "email is not valid";
+    String? res = validateEmpty(email);
+    if (res != null) {
+      return res;
+    } else if (!GetUtils.isEmail(email ?? '')) {
+      return "email is not valid";
     }
     return null;
   }
 
   String? validatePassword(String? password) {
-    if (GetUtils.isLengthLessThan(
+    String? res = validateEmpty(password);
+    if (res != null) {
+      return res;
+    } else if (GetUtils.isLengthLessThan(
       password,
       8,
     )) {
-      return passwordErrorMessage = "password is short";
+      return "password is short";
     }
     return null;
   }
 
-  // User? validateInputs() {
-  //   bool? validated = loginFormKey.currentState?.validate();
-  //   if (validated != null && !validated) {
-  //     update();
-  //     return null;
-  //   }
-  // }
+  String? validateEmpty(String? value) {
+    if (value == null || value.isEmpty) {
+      return "You can't leave this field empty";
+    }
+    return null;
+  }
+
+  bool validateInputs() {
+    bool validated = loginFormKey.currentState!.validate();
+
+    if (validated == false) {
+      return false;
+    }
+    return true;
+  }
 
   Future<bool> login(bodyData) async {
     return await DioHelper.postData(

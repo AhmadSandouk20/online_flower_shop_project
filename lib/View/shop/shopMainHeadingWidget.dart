@@ -74,6 +74,7 @@ class ShopMainHeadingWidget extends StatelessWidget {
                   ],
                 ),
                 CustomTextFormField(
+                  validate: null,
                   label: "search".tr,
                   suffixIcon: 1,
                   textEditingController: TextEditingController(),

@@ -1,17 +1,16 @@
 import 'dart:developer';
 
-import 'package:online_flower_shop/Conrtoller/shop/ShopMainPageController.dart';
-import 'package:online_flower_shop/View/logScreens/login/loginScreen.dart';
+import 'package:online_flower_shop/constants/shopText.dart';
 import 'package:pinput/pinput.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
+import 'package:online_flower_shop/View/logScreens/login/loginScreen.dart';
 import '../../../Bindings/shopMainPageBindings.dart';
 import '../../../common/sizeConfig.dart';
 import '../../../Conrtoller/LogControllers/VerificationController.dart';
 import '../../../Styles/colors.dart';
-import '../../../Styles/fonts.dart';
 import '../../../common/custom/customMaterialButton.dart';
 import '../../../common/custom/customText.dart';
 import '../../../View/shop/shopMainPage.dart';
@@ -76,7 +75,7 @@ class VerificationScreen extends StatelessWidget {
                     children: [
                       CustomText(
                         fatherConstrains: constrains,
-                        text: "verficationCode".tr,
+                        text: ShopText.verficationCode,
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
@@ -84,7 +83,7 @@ class VerificationScreen extends StatelessWidget {
                         ),
                         child: CustomText(
                           fatherConstrains: constrains,
-                          text: "enterCodeMessage".tr,
+                          text: ShopText.enterCodeMessage,
                         ),
                       ),
                       Padding(
@@ -100,6 +99,7 @@ class VerificationScreen extends StatelessWidget {
                               ),
                             ),
                             onPressed: () async {
+                              log("i am from ${verificationController.from}");
                               if (verificationController.from == "signup") {
                                 await verificationController
                                     .reSendVerficationCode(
@@ -117,7 +117,7 @@ class VerificationScreen extends StatelessWidget {
                                   verificationController.verifiying
                                       ? const CircularProgressIndicator()
                                       : Text(
-                                          "reSendCode".tr,
+                                          ShopText.reSendCode,
                                         ),
                             ),
                           ),
@@ -164,7 +164,7 @@ class VerificationScreen extends StatelessWidget {
                         ),
                         child: CustomText(
                           fatherConstrains: constrains,
-                          text: "verificationCodeContent".tr,
+                          text: ShopText.verificationCodeContent,
                         ),
                       ),
                       SizedBox(
@@ -229,7 +229,7 @@ Widget buttonOrIndicator(
           backgroundColor: ShopLightColors.elipseBackgroundColor,
           textColor: ShopLightColors.primaryColor,
           minWidth: constrains.maxWidth * 65 / 100,
-          buttonText: "submit".tr,
+          buttonText: ShopText.submit,
           onPressed: () async {
             log("email is ${verificationController.email} and code is ${verificationController.pIController.text.trim()}");
             // TODO here

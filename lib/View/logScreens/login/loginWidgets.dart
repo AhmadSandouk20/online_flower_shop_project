@@ -42,7 +42,7 @@ Widget middle({
               height: 10.h,
             ),
             Text(
-              "lessThan8".tr,
+              ShopText.lessThan8,
               style: TextStyle(
                 fontSize: 15.sp,
               ),
@@ -53,7 +53,7 @@ Widget middle({
             TextButton(
               onPressed: () {},
               child: Text(
-                "forgetPassword".tr,
+                ShopText.forgetPassword,
                 style: TextStyle(
                   fontSize: 15.sp,
                   color: Colors.red,
@@ -78,10 +78,10 @@ Widget middle({
                   fontSize: 14.sp,
                 ),
                 TextSpan(
-                  text: "noAccount".tr,
+                  text: ShopText.noAccount,
                   children: <InlineSpan>[
                     TextSpan(
-                      text: 'signUp'.tr,
+                      text: ShopText.signUp,
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         color: ShopLightColors.primaryColor,
@@ -121,36 +121,41 @@ Widget buttonOrIndicator({
       : CustomMaterialbutton(
           onPressed: () async {
             controller.tryingToLogin = true;
-            await controller.login({
-              "identifier": controller.emailEController.text,
-              "password": controller.passwordEController.text,
-            }).then(
-              (success) {
-                controller.tryingToLogin = false;
-                if (success) {
-                  Get.to(
-                    () => const VerificationScreen(),
-                    binding: BindingsBuilder.put(
-                      () => VerificationController(),
-                    ),
-                    arguments: {
-                      "email": controller.emailEController.text,
-                      "from": "login",
-                    },
-                  );
-                } else {
-                  Get.dialog(
-                    const AlertDialog(
-                      content: Text(
-                        "please make sure you filled the fields and your internet is connected",
+            bool dataIsValid = controller.validateInputs();
+            if (dataIsValid) {
+              await controller.login({
+                "identifier": controller.emailEController.text,
+                "password": controller.passwordEController.text,
+              }).then(
+                (success) {
+                  controller.tryingToLogin = false;
+                  if (success) {
+                    Get.to(
+                      () => const VerificationScreen(),
+                      binding: BindingsBuilder.put(
+                        () => VerificationController(),
                       ),
-                    ),
-                  );
-                }
-              },
-            );
+                      arguments: {
+                        "email": controller.emailEController.text,
+                        "from": "login",
+                      },
+                    );
+                  } else {
+                    Get.dialog(
+                      const AlertDialog(
+                        content: Text(
+                          "please make sure you filled the fields and your internet is connected",
+                        ),
+                      ),
+                    );
+                  }
+                },
+              );
+            } else {
+              controller.tryingToLogin = false;
+            }
           },
-          buttonText: "login".tr,
+          buttonText: ShopText.login,
           textColor: Colors.white,
           backgroundColor: ShopLightColors.primaryColor,
         );

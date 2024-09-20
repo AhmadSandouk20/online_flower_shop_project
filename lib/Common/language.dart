@@ -46,6 +46,7 @@ class Language implements Translations {
           "ok": "Ok",
           "helloUser": "Hello User",
           "customizeSpecialGifts": "Customize Special Gifts",
+          "plusOne": "+1",
           "gifts": " Gifts",
           "search": "Search",
           "flowers": "Flowers",
@@ -147,6 +148,7 @@ class Language implements Translations {
               "الرجاء إدخال رمز التحقق المرسل إلى عنوان البريد الإلكتروني .....@Gmail.com",
           "10minsValid": "صالحة لمدة 10 دقائق",
           "submit": "موافق",
+          "plusOne": "+1",
           "price": "السعر: ",
           "addToCart": "إضافة إلى السلة ",
           "color": "اللون",
@@ -205,6 +207,7 @@ class Language implements Translations {
           "name": "الاسم",
           "arabic": "العربية",
           'english': "الانكليزية",
+          //-------------------errors
         },
       };
 }

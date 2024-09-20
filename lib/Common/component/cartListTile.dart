@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 
 import '../../Styles/colors.dart';
+import '../../constants/shopText.dart';
 
 cartListTile({
   required String name,
@@ -33,7 +33,7 @@ cartListTile({
               width: listTileCons.maxWidth * 75 / 100,
               child: RichText(
                 text: TextSpan(
-                  text: "order".tr,
+                  text: ShopText.order,
                   // softWrap: true,
                   style: TextStyle(
                     color: ShopLightColors.primaryColor,
@@ -96,9 +96,9 @@ cartListTile({
                           ),
                         ),
                         child: Center(
-                          child: const Text(
-                            "+1",
-                            style: TextStyle(
+                          child: Text(
+                            ShopText.plusOne,
+                            style: const TextStyle(
                               color: Color(
                                 0xFF5AE804,
                               ),

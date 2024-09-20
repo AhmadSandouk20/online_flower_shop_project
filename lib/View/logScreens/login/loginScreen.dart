@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
+import '../../../constants/shopText.dart';
 import '../../../common/sizeConfig.dart';
 import '../../../Conrtoller/LogControllers/loginController.dart';
 import 'loginWidgets.dart';
-import '../../../Styles/colors.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -26,7 +26,7 @@ class LoginScreen extends StatelessWidget {
                   left: SizeConfig.screenWidth / 7,
                   top: SizeConfig.screenHeight / 8,
                   child: Text(
-                    "logo".tr,
+                    ShopText.logo,
                     style: TextStyle(
                       // color: ShopLightColors.primaryColor,
                       fontSize: 64.sp,
